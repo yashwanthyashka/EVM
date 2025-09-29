@@ -5,43 +5,57 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+/* Card styles */
+.card {
+    @apply bg-white border border-gray-200/80 shadow-sm rounded-xl p-6 md:p-8;
+}
+.card-title {
+    @apply text-xl font-bold text-gray-900;
+}
+.card-subtitle {
+    @apply text-sm text-gray-500 mt-1;
+}
+
 /* Base button styles */
 .btn {
-    @apply inline-flex items-center justify-center font-semibold py-2.5 px-5 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center font-semibold py-2.5 px-4 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap;
 }
 .btn-primary {
     @apply bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500;
 }
 .btn-secondary {
-    @apply bg-slate-200 text-slate-800 hover:bg-slate-300 focus:ring-slate-400;
+    @apply bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-indigo-500 border border-gray-200;
 }
 .btn-danger {
-    @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+    @apply bg-red-50 text-red-700 hover:bg-red-100 focus:ring-red-500 border border-red-200;
 }
 
 /* Input fields */
 .label {
-    @apply block text-sm font-medium text-slate-600 mb-1;
+    @apply block text-sm font-medium text-gray-600 mb-1.5;
 }
 .input-field {
-    @apply block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+    @apply block w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm shadow-sm placeholder-gray-400
            focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500;
 }
 .file-input {
-    @apply block w-full text-sm text-slate-500
+    @apply block w-full text-sm text-gray-500
            file:mr-4 file:py-2 file:px-4
-           file:rounded-full file:border-0
+           file:rounded-lg file:border-0
            file:text-sm file:font-semibold
            file:bg-indigo-50 file:text-indigo-700
-           hover:file:bg-indigo-100 cursor-pointer;
+           hover:file:bg-indigo-100 cursor-pointer border border-gray-300 rounded-lg;
 }
 
-/* Card styles */
-.card {
-    @apply bg-white shadow-lg shadow-slate-200/50 rounded-xl p-6 md:p-8;
+/* Input Group for combining input and button */
+.input-group {
+    @apply flex items-center;
 }
-.card-title {
-    @apply text-xl font-bold mb-5 text-slate-800 flex items-center gap-3;
+.input-group .input-field {
+    @apply rounded-r-none z-10;
+}
+.input-group .btn {
+    @apply rounded-l-none -ml-px;
 }
 
 /* Loading spinner animation */
@@ -51,18 +65,3 @@ body {
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
-
-/* Status Toast Notification */
-.status-toast {
-    @apply fixed bottom-5 right-5 p-4 rounded-lg shadow-xl text-white translate-x-[calc(100%+2rem)] transition-all duration-500;
-}
-.status-toast.show {
-    @apply translate-x-0;
-}
-.status-toast.success {
-    @apply bg-emerald-500;
-}
-.status-toast.error {
-    @apply bg-red-500;
-}
-
