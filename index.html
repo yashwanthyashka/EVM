@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence Management dApp</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Ethers.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js" xintegrity="sha512-FDcVY+g7vcI2AqOP27K22K0i9blIgcacfZ70sC4eJ3bWRd3B2fGfSGGz2kE3xptmePAQNJ4jL2M4A15K2BA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body class="bg-slate-50">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-800 tracking-tight">Evidence Management System</h1>
+            <p class="text-slate-500 mt-3 text-lg">Secure, Immutable, Decentralized.</p>
+        </header>
+
+        <!-- Connection Status -->
+        <div class="card text-center max-w-md mx-auto">
+            <button id="connectButton" class="btn btn-primary w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+                <span>Connect Wallet</span>
+            </button>
+            <div id="connectionInfo" class="hidden mt-4 p-3 bg-slate-100 rounded-lg">
+                <p id="connectionStatus" class="font-mono text-sm text-slate-500"></p>
+                <p id="userAddress" class="mt-1 font-mono text-sm text-emerald-600 truncate"></p>
+            </div>
+        </div>
+
+        <!-- Main dApp Interface -->
+        <main id="dappInterface" class="hidden mt-8 space-y-8">
+            
+            <section class="card">
+                <h2 class="card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>Pinata Configuration</span>
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="pinataApiKey" class="label">Pinata API Key</label>
+                        <input type="password" id="pinataApiKey" class="input-field" placeholder="Enter your Pinata API Key">
+                    </div>
+                    <div>
+                        <label for="pinataSecretApiKey" class="label">Pinata Secret API Key</label>
+                        <input type="password" id="pinataSecretApiKey" class="input-field" placeholder="Enter your Pinata Secret API Key">
+                    </div>
+                </div>
+            </section>
+
+            <section id="ownerControls" class="card hidden">
+                <h2 class="card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                    <span>Owner Controls</span>
+                </h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-semibold text-lg mb-3 text-slate-700">Grant Roles</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="grantPoliceAddress" class="label">Grant Police Role</label>
+                                <input type="text" id="grantPoliceAddress" class="input-field" placeholder="0x...">
+                                <button id="grantPoliceButton" class="btn btn-secondary w-full mt-2">
+                                    <span class="btn-text">Grant Police</span>
+                                    <div class="spinner hidden"></div>
+                                </button>
+                            </div>
+                            <div>
+                                <label for="grantCourtAddress" class="label">Grant Court Official Role</label>
+                                <input type="text" id="grantCourtAddress" class="input-field" placeholder="0x...">
+                                <button id="grantCourtButton" class="btn btn-secondary w-full mt-2">
+                                    <span class="btn-text">Grant Court Official</span>
+                                    <div class="spinner hidden"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg mb-3 text-slate-700">Revoke Roles</h3>
+                        <div class="space-y-4">
+                             <div>
+                                <label for="revokePoliceAddress" class="label">Revoke Police Role</label>
+                                <input type="text" id="revokePoliceAddress" class="input-field" placeholder="0x...">
+                                <button id="revokePoliceButton" class="btn btn-danger w-full mt-2">
+                                    <span class="btn-text">Revoke Police</span>
+                                    <div class="spinner hidden"></div>
+                                </button>
+                            </div>
+                            <div>
+                                <label for="revokeCourtAddress" class="label">Revoke Court Official Role</label>
+                                <input type="text" id="revokeCourtAddress" class="input-field" placeholder="0x...">
+                                <button id="revokeCourtButton" class="btn btn-danger w-full mt-2">
+                                    <span class="btn-text">Revoke Court Official</span>
+                                    <div class="spinner hidden"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="addEvidenceSection" class="card hidden">
+                <h2 class="card-title">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                    <span>Add New Evidence</span>
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="caseId" class="label">Case ID</label>
+                        <input type="text" id="caseId" class="input-field" placeholder="e.g., CASE-2025-001">
+                    </div>
+                    <div>
+                        <label for="evidenceDescription" class="label">Evidence Description</label>
+                        <textarea id="evidenceDescription" class="input-field" rows="3" placeholder="Description of the evidence..."></textarea>
+                    </div>
+                     <div>
+                        <label for="evidenceFile" class="label">Evidence File</label>
+                        <input type="file" id="evidenceFile" class="file-input"/>
+                    </div>
+                    <button id="addEvidenceButton" class="btn btn-primary w-full !mt-6">
+                        <span class="btn-text">Upload & Add to Blockchain</span>
+                        <div class="spinner hidden"></div>
+                    </button>
+                </div>
+            </section>
+
+            <section id="getEvidenceSection" class="card hidden">
+                 <h2 class="card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span>Retrieve Evidence</span>
+                </h2>
+                <div class="flex items-end gap-2">
+                    <div class="flex-grow">
+                        <label for="evidenceId" class="label">Evidence ID</label>
+                        <input type="number" id="evidenceId" class="input-field" placeholder="e.g., 1">
+                    </div>
+                    <button id="getEvidenceButton" class="btn btn-secondary">
+                         <span class="btn-text">Get</span>
+                         <div class="spinner hidden"></div>
+                    </button>
+                </div>
+                <div id="evidenceDetails" class="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-200 min-h-[100px]">
+                    <p class="text-slate-500">Evidence details will appear here...</p>
+                </div>
+            </section>
+        </main>
+        
+        <div id="statusToast" class="status-toast"></div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
