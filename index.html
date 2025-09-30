@@ -21,34 +21,65 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-3xl">
+    <div class="min-h-screen py-8 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="main-container rounded-3xl p-8 md:p-12">
         <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">Evidence Management System</h1>
-            <p class="text-gray-500 mt-3 text-lg">A decentralized application for secure and immutable evidence tracking.</p>
+                    <div class="mb-6">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14,2 14,8 20,8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10,9 9,9 8,9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4">Evidence Management</h1>
+                    <p class="text-white/80 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">A decentralized application for secure and immutable evidence tracking on the blockchain.</p>
         </header>
 
         <!-- Connection Status -->
-        <div class="card text-center max-w-md mx-auto">
-            <button id="connectButton" class="btn btn-primary w-full">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 h-5 w-5"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+                <div class="card text-center max-w-lg mx-auto mb-8">
+                    <button id="connectButton" class="btn btn-primary w-full text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="wallet-icon mr-3 h-6 w-6"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
                 <span>Connect Wallet</span>
             </button>
-            <div class="mt-4 text-left">
-                <p id="connectionStatus" class="font-mono text-sm text-gray-500">Status: Not Connected</p>
-                <p id="userAddress" class="mt-1 font-mono text-sm text-emerald-600 truncate"></p>
+                    <div class="mt-6 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-gray-600">Status:</span>
+                            <span id="connectionStatus" class="connection-indicator disconnected">Not Connected</span>
+                        </div>
+                        <div id="userAddressContainer" class="hidden">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-600">Address:</span>
+                                <code id="userAddress" class="text-xs bg-gray-100 px-2 py-1 rounded-lg font-mono text-gray-700"></code>
+                            </div>
+                        </div>
             </div>
         </div>
         
         <!-- Status Message Area -->
-        <div id="statusMessage" class="my-6"></div>
+                <div id="statusMessage" class="mb-8"></div>
 
         <!-- Main dApp Interface -->
-        <main id="dappInterface" class="hidden mt-8 space-y-8">
+                <main id="dappInterface" class="hidden space-y-8">
             
             <section class="card">
-                <h2 class="card-title">Pinata Configuration</h2>
-                <p class="card-subtitle">Enter your Pinata keys to enable file uploads to IPFS.</p>
-                <div class="space-y-4 mt-6">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="card-title">IPFS Configuration</h2>
+                                <p class="card-subtitle">Configure your Pinata credentials for decentralized file storage.</p>
+                            </div>
+                        </div>
+                        <div class="form-section">
                     <div>
                         <label for="pinataApiKey" class="label">Pinata API Key</label>
                         <input type="password" id="pinataApiKey" class="input-field" placeholder="Enter your Pinata API Key">
@@ -57,15 +88,28 @@
                         <label for="pinataSecretApiKey" class="label">Pinata Secret API Key</label>
                         <input type="password" id="pinataSecretApiKey" class="input-field" placeholder="Enter your Pinata Secret API Key">
                     </div>
+                        </div>
                 </div>
             </section>
 
             <section id="ownerControls" class="card hidden">
-                <h2 class="card-title">Owner Controls</h2>
-                <p class="card-subtitle">Grant or revoke roles for police and court officials.</p>
-                <div class="grid md:grid-cols-2 gap-x-6 gap-y-8 mt-6">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="m22 21-3-3m0 0a5.5 5.5 0 1 0-7.78-7.78 5.5 5.5 0 0 0 7.78 7.78Z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="card-title">Role Management</h2>
+                                <p class="card-subtitle">Grant or revoke access permissions for police and court officials.</p>
+                            </div>
+                        </div>
+                        <div class="role-grid">
                     <!-- Grant Roles -->
-                    <div class="space-y-6">
+                            <div class="form-section">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Grant Roles</h3>
                         <div>
                             <label for="grantPoliceAddress" class="label">Grant Police Role</label>
                             <div class="input-group">
@@ -82,7 +126,8 @@
                         </div>
                     </div>
                     <!-- Revoke Roles -->
-                    <div class="space-y-6">
+                            <div class="form-section">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Revoke Roles</h3>
                          <div>
                             <label for="revokePoliceAddress" class="label">Revoke Police Role</label>
                             <div class="input-group">
@@ -102,9 +147,21 @@
             </section>
 
             <section id="addEvidenceSection" class="card hidden">
-                <h2 class="card-title">Add New Evidence</h2>
-                <p class="card-subtitle">Fill in the details below and upload the evidence file.</p>
-                <div class="space-y-4 mt-6">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                                    <polyline points="14,2 14,8 20,8"></polyline>
+                                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="card-title">Submit Evidence</h2>
+                                <p class="card-subtitle">Upload and register new evidence to the blockchain.</p>
+                            </div>
+                        </div>
+                        <div class="form-section">
                     <div>
                         <label for="caseId" class="label">Case ID</label>
                         <input type="text" id="caseId" class="input-field" placeholder="e.g., CASE-2025-001">
@@ -117,29 +174,60 @@
                         <label for="evidenceFile" class="label">Evidence File</label>
                         <input type="file" id="evidenceFile" class="file-input"/>
                     </div>
-                    <button id="addEvidenceButton" class="btn btn-primary w-full !mt-6">
-                        Upload & Add to Blockchain
+                            <button id="addEvidenceButton" class="btn btn-primary w-full text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7,10 12,15 17,10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                Upload & Register Evidence
                     </button>
+                        </div>
                 </div>
             </section>
 
             <section id="getEvidenceSection" class="card hidden">
-                 <h2 class="card-title">Retrieve Evidence</h2>
-                 <p class="card-subtitle">Enter an Evidence ID to fetch its details from the blockchain.</p>
-                <div class="flex items-end gap-2 mt-6">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-4">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="card-title">Search Evidence</h2>
+                                <p class="card-subtitle">Retrieve evidence details from the blockchain database.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-end gap-4 mb-6">
                     <div class="flex-grow">
                         <label for="evidenceId" class="label">Evidence ID</label>
                         <input type="number" id="evidenceId" class="input-field" placeholder="e.g., 1">
                     </div>
-                    <button id="getEvidenceButton" class="btn btn-secondary">
-                         Get Evidence
+                            <button id="getEvidenceButton" class="btn btn-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                                Search
                     </button>
                 </div>
-                <div id="evidenceDetails" class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200 min-h-[100px]">
-                    <p class="text-gray-500">Evidence details will appear here...</p>
+                        <div id="evidenceDetails" class="evidence-details min-h-[120px] flex items-center justify-center">
+                            <p class="text-gray-500 text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-3 text-gray-300">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14,2 14,8 20,8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10,9 9,9 8,9"></polyline>
+                                </svg>
+                                Evidence details will appear here...
+                            </p>
                 </div>
             </section>
-        </main>
+                </main>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>

@@ -345,8 +345,10 @@ async function connectWallet() {
 }
 
 async function updateUIOnConnect() {
-    connectionStatus.textContent = "Status: Connected";
-    userAddressP.textContent = `Your Address: ${userAddress}`;
+    connectionStatus.textContent = "Connected";
+    connectionStatus.className = "connection-indicator connected";
+    userAddressP.textContent = userAddress.slice(0, 6) + '...' + userAddress.slice(-4);
+    document.getElementById('userAddressContainer').classList.remove('hidden');
     connectButton.textContent = "Connected";
     connectButton.disabled = true;
     dappInterface.classList.remove('hidden');
@@ -381,7 +383,7 @@ async function checkUserRole() {
 
 function showStatus(message, isError = false) {
     statusMessage.textContent = message;
-    statusMessage.className = `mt-4 text-center text-sm p-3 rounded-lg ${isError ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
+    statusMessage.className = `text-center text-sm p-4 rounded-xl shadow-sm ${isError ? 'status-error' : 'status-success'}`;
     if (!isError) {
         setTimeout(() => {
             statusMessage.textContent = '';
@@ -528,19 +530,64 @@ document.getElementById('getEvidenceButton').addEventListener('click', async () 
         const date = new Date(timestamp * 1000).toLocaleString();
 
         evidenceDetailsDiv.innerHTML = `
-            <h3 class="font-bold text-lg mb-2">Evidence Details (ID: ${id})</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2">
-                <p><strong>Case ID:</strong> ${caseId}</p>
-                <p><strong>Timestamp:</strong> ${date}</p>
-                <p class="md:col-span-2"><strong>Uploaded By:</strong> ${uploadedBy}</p>
-                <p class="md:col-span-2"><strong>Description:</strong> ${description}</p>
-                <p class="md:col-span-2"><strong>IPFS Hash:</strong> <a href="https://gateway.pinata.cloud/ipfs/${ipfsHash}" target="_blank" class="text-blue-600 hover:underline">${ipfsHash}</a></p>
+            <div class="flex items-center mb-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-lg flex items-center justify-center mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14,2 14,8 20,8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10,9 9,9 8,9"></polyline>
+                    </svg>
+                </div>
+                <h3 class="font-bold text-lg text-gray-900">Evidence #${id}</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-3">
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">Case ID</span>
+                        <p class="font-semibold text-gray-900">${caseId}</p>
+                    </div>
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">Timestamp</span>
+                        <p class="font-semibold text-gray-900">${date}</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">Uploaded By</span>
+                        <p class="font-mono text-sm bg-gray-100 px-2 py-1 rounded text-gray-700">${uploadedBy.slice(0, 6)}...${uploadedBy.slice(-4)}</p>
+                    </div>
+                    <div>
+                        <span class="text-sm font-medium text-gray-500">IPFS File</span>
+                        <a href="https://gateway.pinata.cloud/ipfs/${ipfsHash}" target="_blank" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium text-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                            View File
+                        </a>
+                    </div>
+                </div>
+                <div class="md:col-span-2 mt-2">
+                    <span class="text-sm font-medium text-gray-500">Description</span>
+                    <p class="mt-1 text-gray-900 leading-relaxed">${description}</p>
+                </div>
             </div>
         `;
         showStatus("Evidence retrieved successfully.");
     } catch (error) {
         console.error("Error getting evidence:", error);
-        evidenceDetailsDiv.innerHTML = `<p class="text-red-500">Error: ${error.reason || error.message}</p>`;
+        evidenceDetailsDiv.innerHTML = `
+            <div class="text-center py-8">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-3 text-red-300">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+                <p class="text-red-600 font-medium">Error: ${error.reason || error.message}</p>
+            </div>
+        `;
         showStatus(`Error: ${error.reason || error.message}`, true);
     }
 });
@@ -553,8 +600,9 @@ if (typeof window.ethereum !== 'undefined') {
             dappInterface.classList.add('hidden');
             connectButton.disabled = false;
             connectButton.textContent = "Connect Wallet";
-            connectionStatus.textContent = "Status: Not Connected";
-            userAddressP.textContent = '';
+            connectionStatus.textContent = "Not Connected";
+            connectionStatus.className = "connection-indicator disconnected";
+            document.getElementById('userAddressContainer').classList.add('hidden');
         } else if (accounts[0] !== userAddress) {
             // This will automatically reload and re-check roles if you switch accounts
             window.location.reload();
