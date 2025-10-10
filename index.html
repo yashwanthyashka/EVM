@@ -4,30 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evidence Management dApp</title>
-    
-    <!-- Google Fonts: Inter -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- External CSS -->
+
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Ethers.js -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="text-gray-800">
 
     <div class="min-h-screen py-8 px-4">
-        <div class="container mx-auto max-w-4xl">
+        <div class="container mx-auto max-w-5xl">
             <div class="main-container rounded-3xl p-8 md:p-12">
         <header class="text-center mb-10">
                     <div class="mb-6">
-                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="w-24 h-24 mx-auto mb-6 icon-container rounded-3xl flex items-center justify-center shadow-xl transform hover:scale-105 transition-transform duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                 <polyline points="14,2 14,8 20,8"></polyline>
                                 <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -36,47 +32,65 @@
                             </svg>
                         </div>
                     </div>
-                    <h1 class="text-4xl md:text-6xl font-bold text-white tracking-tight mb-4">Evidence Management</h1>
-                    <p class="text-white/80 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">A decentralized application for secure and immutable evidence tracking on the blockchain.</p>
+                    <h1 class="text-5xl md:text-6xl font-bold text-white tracking-tight mb-4 gradient-text">Evidence Management</h1>
+                    <p class="text-white/90 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-medium">A decentralized application for secure and immutable evidence tracking on the blockchain.</p>
         </header>
 
-        <!-- Connection Status -->
-                <div class="card text-center max-w-lg mx-auto mb-8">
-                    <button id="connectButton" class="btn btn-primary w-full text-base">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="wallet-icon mr-3 h-6 w-6"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+        <div id="statusMessage" class="mb-8"></div>
+
+                <div class="card text-center max-w-2xl mx-auto mb-10">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="w-14 h-14 icon-container rounded-2xl flex items-center justify-center mr-4 shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <h2 class="card-title text-xl mb-0">Wallet Connection</h2>
+                            <p class="card-subtitle text-xs">Connect your MetaMask wallet to begin</p>
+                        </div>
+                    </div>
+
+                    <button id="connectButton" class="btn btn-primary w-full text-base mb-6 shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="wallet-icon mr-3 h-6 w-6">
+                            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path>
+                            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path>
+                            <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path>
+                        </svg>
                 <span>Connect Wallet</span>
             </button>
-                    <div class="mt-6 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-sm font-medium text-gray-600">Status:</span>
+
+                    <div class="gradient-divider"></div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between py-2">
+                            <span class="text-sm font-semibold" style="color: #1B3C53;">Connection Status</span>
                             <span id="connectionStatus" class="connection-indicator disconnected">Not Connected</span>
                         </div>
                         <div id="userAddressContainer" class="hidden">
-                            <div class="flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-600">Address:</span>
-                                <code id="userAddress" class="text-xs bg-gray-100 px-2 py-1 rounded-lg font-mono text-gray-700"></code>
+                            <div class="flex items-center justify-between py-2">
+                                <span class="text-sm font-semibold" style="color: #1B3C53;">Wallet Address</span>
+                                <code id="userAddress" class="text-xs badge font-mono"></code>
                             </div>
                         </div>
             </div>
         </div>
-        
-        <!-- Status Message Area -->
-                <div id="statusMessage" class="mb-8"></div>
 
-        <!-- Main dApp Interface -->
-                <main id="dappInterface" class="hidden space-y-8">
-            
+                <main id="dappInterface" class="hidden space-y-10">
+
             <section class="card">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mr-4 shadow-lg" style="background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                                     <path d="m9 12 2 2 4-4"></path>
                                 </svg>
                             </div>
                             <div>
                                 <h2 class="card-title">IPFS Configuration</h2>
-                                <p class="card-subtitle">Configure your Pinata credentials for decentralized file storage.</p>
+                                <p class="card-subtitle">Configure your Pinata credentials for decentralized file storage</p>
                             </div>
                         </div>
                         <div class="form-section">
@@ -89,13 +103,12 @@
                         <input type="password" id="pinataSecretApiKey" class="input-field" placeholder="Enter your Pinata Secret API Key">
                     </div>
                         </div>
-                </div>
-            </section>
+                </section>
 
             <section id="ownerControls" class="card hidden">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mr-4 shadow-lg" style="background: linear-gradient(135deg, #a855f7 0%, #c084fc 100%);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
                                     <circle cx="9" cy="7" r="4"></circle>
                                     <path d="m22 21-3-3m0 0a5.5 5.5 0 1 0-7.78-7.78 5.5 5.5 0 0 0 7.78 7.78Z"></path>
@@ -103,13 +116,12 @@
                             </div>
                             <div>
                                 <h2 class="card-title">Role Management</h2>
-                                <p class="card-subtitle">Grant or revoke access permissions for police and court officials.</p>
+                                <p class="card-subtitle">Grant or revoke access permissions for police and court officials</p>
                             </div>
                         </div>
                         <div class="role-grid">
-                    <!-- Grant Roles -->
-                            <div class="form-section">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Grant Roles</h3>
+                            <div class="form-section p-6 rounded-2xl" style="background: linear-gradient(135deg, rgba(210, 193, 182, 0.15) 0%, rgba(255, 255, 255, 0.5) 100%); border: 1px solid rgba(210, 193, 182, 0.3);">
+                                <h3 class="text-lg font-bold mb-6" style="color: #1B3C53;">Grant Roles</h3>
                         <div>
                             <label for="grantPoliceAddress" class="label">Grant Police Role</label>
                             <div class="input-group">
@@ -125,9 +137,8 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Revoke Roles -->
-                            <div class="form-section">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-4">Revoke Roles</h3>
+                            <div class="form-section p-6 rounded-2xl" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(255, 255, 255, 0.5) 100%); border: 1px solid rgba(239, 68, 68, 0.15);">
+                                <h3 class="text-lg font-bold mb-6" style="color: #1B3C53;">Revoke Roles</h3>
                          <div>
                             <label for="revokePoliceAddress" class="label">Revoke Police Role</label>
                             <div class="input-group">
@@ -147,9 +158,9 @@
             </section>
 
             <section id="addEvidenceSection" class="card hidden">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mr-4 shadow-lg" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
                                     <polyline points="14,2 14,8 20,8"></polyline>
                                     <line x1="12" y1="18" x2="12" y2="12"></line>
@@ -158,7 +169,7 @@
                             </div>
                             <div>
                                 <h2 class="card-title">Submit Evidence</h2>
-                                <p class="card-subtitle">Upload and register new evidence to the blockchain.</p>
+                                <p class="card-subtitle">Upload and register new evidence to the blockchain</p>
                             </div>
                         </div>
                         <div class="form-section">
@@ -168,13 +179,13 @@
                     </div>
                     <div>
                         <label for="evidenceDescription" class="label">Evidence Description</label>
-                        <textarea id="evidenceDescription" class="input-field" rows="3" placeholder="A detailed description of the evidence..."></textarea>
+                        <textarea id="evidenceDescription" class="input-field" rows="4" placeholder="Provide a detailed description of the evidence..."></textarea>
                     </div>
                      <div>
                         <label for="evidenceFile" class="label">Evidence File</label>
                         <input type="file" id="evidenceFile" class="file-input"/>
                     </div>
-                            <button id="addEvidenceButton" class="btn btn-primary w-full text-base">
+                            <button id="addEvidenceButton" class="btn btn-primary w-full text-base mt-2 shadow-lg">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
                                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                                     <polyline points="7,10 12,15 17,10"></polyline>
@@ -183,46 +194,45 @@
                                 Upload & Register Evidence
                     </button>
                         </div>
-                </div>
             </section>
 
             <section id="getEvidenceSection" class="card hidden">
-                        <div class="flex items-center mb-6">
-                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mr-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="flex items-center mb-8">
+                            <div class="w-14 h-14 rounded-2xl flex items-center justify-center mr-4 shadow-lg" style="background: linear-gradient(135deg, #f59e0b 0%, #fb923c 100%);">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <path d="m21 21-4.35-4.35"></path>
                                 </svg>
                             </div>
                             <div>
                                 <h2 class="card-title">Search Evidence</h2>
-                                <p class="card-subtitle">Retrieve evidence details from the blockchain database.</p>
+                                <p class="card-subtitle">Retrieve evidence details from the blockchain database</p>
                             </div>
                         </div>
-                        <div class="flex items-end gap-4 mb-6">
+                        <div class="flex items-end gap-4 mb-8">
                     <div class="flex-grow">
                         <label for="evidenceId" class="label">Evidence ID</label>
-                        <input type="number" id="evidenceId" class="input-field" placeholder="e.g., 1">
+                        <input type="number" id="evidenceId" class="input-field" placeholder="Enter evidence ID (e.g., 1)">
                     </div>
-                            <button id="getEvidenceButton" class="btn btn-secondary">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                            <button id="getEvidenceButton" class="btn btn-secondary px-8 shadow-lg">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
                                     <circle cx="11" cy="11" r="8"></circle>
                                     <path d="m21 21-4.35-4.35"></path>
                                 </svg>
                                 Search
                     </button>
                 </div>
-                        <div id="evidenceDetails" class="evidence-details min-h-[120px] flex items-center justify-center">
-                            <p class="text-gray-500 text-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-3 text-gray-300">
+                        <div id="evidenceDetails" class="evidence-details min-h-[160px] flex items-center justify-center">
+                            <div class="text-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-4" style="color: rgba(69, 104, 130, 0.3);">
                                     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                     <polyline points="14,2 14,8 20,8"></polyline>
                                     <line x1="16" y1="13" x2="8" y2="13"></line>
                                     <line x1="16" y1="17" x2="8" y2="17"></line>
                                     <polyline points="10,9 9,9 8,9"></polyline>
                                 </svg>
-                                Evidence details will appear here...
-                            </p>
+                                <p class="text-sm font-medium" style="color: #456882;">Enter an Evidence ID and click Search to view details</p>
+                            </div>
                 </div>
             </section>
                 </main>
